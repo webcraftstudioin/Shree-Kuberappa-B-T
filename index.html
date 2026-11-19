@@ -87,9 +87,9 @@ img{max-width:100%;display:block}
 .paper{position:absolute;left:20%;top:22.5%;width:61%;height:53%;overflow:hidden;text-align:center;
   font-size:calc(var(--fw) * var(--fs) * var(--k,1));line-height:1.55}
 .flow{display:flow-root}.sp{height:0}
-.leaf{float:right;width:calc(var(--fw) * .22);height:calc(var(--fh) * .128);
-  shape-outside:polygon(100% 0,100% 100%,78% 96%,61% 71%,37% 59%,18% 30%,5% 8%,0 0);shape-margin:calc(var(--fw) * .006)}
-.paper p{margin:0 0 .32em}
+.leaf{display:block;height:calc(var(--fh) * .118)}      /* the leaf sits here; text starts below it */
+.nw{display:inline-block}                                 /* phrases that stay on one line */
+.paper p{margin:0 0 .32em;text-wrap:balance}
 .paper .sm{font-size:.84em}
 .paper .cr{color:var(--crimson)}
 .paper .br{color:var(--brown)}
@@ -101,12 +101,11 @@ img{max-width:100%;display:block}
 .daterow{display:flex;align-items:center;justify-content:center;gap:.7em;margin:.45em 0 .4em}
 .daterow span{padding:.18em .1em;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:.82em;min-width:5.6em}
 .daterow b{font-family:"Cormorant Garamond",serif;font-weight:600;font-size:2.3em;line-height:1}
-.cartouche{display:inline-block;position:relative;margin:.3em 0 .45em;padding:0 1.4em .08em;font-family:var(--kd);font-weight:700;font-size:1.7em;line-height:1.35;color:var(--maroon);
+.cartouche{display:inline-block;position:relative;margin:.3em 0 .45em;padding:var(--pt,.12em) 1.4em var(--pb,.12em);font-family:var(--kd);font-weight:700;font-size:1.7em;line-height:normal;color:var(--maroon);
   border:1.5px solid var(--crimson);border-radius:.35em;box-shadow:inset 0 0 0 3px #fff,inset 0 0 0 4px rgba(179,38,30,.3)}
 .cartouche::before,.cartouche::after{content:"";position:absolute;top:50%;width:.4em;height:.4em;background:var(--gold);transform:translateY(-50%) rotate(45deg)}
 .cartouche::before{left:-.23em}.cartouche::after{right:-.23em}
 .guest .name{display:inline-block;min-width:6.5em;border-bottom:1px dotted var(--crimson);font-weight:700;padding:0 .3em}
-.house{height:7.2em;width:auto;max-width:80%;aspect-ratio:712/416;margin:.1em auto .6em;border:4px solid #fff;outline:1px solid var(--gold-l);box-shadow:0 8px 18px -10px rgba(80,30,30,.6)}
 
 /* ---------- families ---------- */
 .inv{font-size:.88rem;color:var(--crimson);line-height:1.8}
@@ -152,6 +151,9 @@ footer{padding:20px 20px max(150px,calc(env(safe-area-inset-bottom) + 140px));te
 .credit{position:relative;overflow:hidden;display:inline-flex;flex-direction:column;align-items:center;gap:3px;padding:14px 30px 15px;border-radius:18px;text-decoration:none;
   background:linear-gradient(160deg,#3d5e32,#26401f);border:1px solid rgba(236,208,138,.75);box-shadow:0 16px 34px -18px rgba(30,55,25,.9),inset 0 0 0 4px rgba(236,208,138,.12);transition:transform .25s,box-shadow .25s}
 .credit:hover{transform:translateY(-2px);box-shadow:0 20px 40px -18px rgba(30,55,25,1),inset 0 0 0 4px rgba(236,208,138,.2)}
+.foot-ask{display:block;margin:0 auto 14px;max-width:300px;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:1.12rem;line-height:1.4;color:var(--brown);text-decoration:none}
+.foot-ask span{display:block;font-style:normal;margin-top:4px;animation:tapb 1.4s ease-in-out infinite}
+.credit em{font-family:var(--sans);font-style:normal;font-size:.72rem;color:rgba(255,246,220,.75);margin-top:3px;letter-spacing:.04em}
 .credit small{font-family:Marcellus,serif;font-size:.62rem;letter-spacing:.32em;text-transform:uppercase;color:rgba(255,246,220,.8)}
 .credit b{font-family:Marcellus,serif;font-weight:400;font-size:clamp(1rem,4.8vw,1.2rem);letter-spacing:.14em;
   background:linear-gradient(100deg,#d9b25a 0%,#f6dd94 30%,#fff6d0 45%,#e3bb62 60%,#d9b25a 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 4s linear infinite}
@@ -255,6 +257,24 @@ footer{padding:20px 20px max(150px,calc(env(safe-area-inset-bottom) + 140px));te
 .st-skip{position:absolute;bottom:max(96px,calc(env(safe-area-inset-bottom) + 90px));font-family:var(--sans);font-size:.78rem;color:rgba(110,19,32,.55);opacity:0;transition:opacity .6s ease 1.6s}
 .stage.full .st-skip{opacity:1}
 
+/* ---------- floating buttons ---------- */
+.fab{position:fixed;z-index:45;border:1px solid rgba(236,208,138,.6);background:linear-gradient(160deg,#3d5e32,#26401f);color:#f6dc93;cursor:pointer;
+  box-shadow:0 10px 24px -10px rgba(20,40,15,.8);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .5s,transform .5s,visibility .5s}
+body.opened .fab{opacity:1;visibility:visible;transform:none}
+.fab-music{right:max(16px,calc((100vw - var(--cw)) / 2 + 16px));bottom:max(18px,calc(env(safe-area-inset-bottom) + 12px));width:46px;height:46px;border-radius:50%}
+.eq{display:flex;align-items:flex-end;gap:3px;height:16px}
+.eq i{width:3px;height:100%;border-radius:2px;background:currentColor;transform-origin:bottom;animation:eq 1s ease-in-out infinite}
+.eq i:nth-child(2){animation-delay:-.4s}.eq i:nth-child(3){animation-delay:-.7s}.eq i:nth-child(4){animation-delay:-.2s}
+@keyframes eq{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
+.fab-music .note{display:none;width:18px;height:18px}
+.fab-music.off .eq{display:none}.fab-music.off .note{display:block}
+.fab-music.off::after{content:"";position:absolute;width:26px;height:2px;background:#f6dc93;transform:rotate(-45deg);border-radius:1px}
+.fab-scroll{left:50%;bottom:max(18px,calc(env(safe-area-inset-bottom) + 12px));height:46px;padding:0 18px 0 14px;border-radius:999px;gap:6px;
+  font-family:Marcellus,serif;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;transform:translate(-50%,12px)}
+body.opened .fab-scroll{transform:translateX(-50%)}
+body.opened .fab-scroll.hide,body.opened .fab-scroll.moving{opacity:0;visibility:hidden;transform:translate(-50%,12px)}
+.fab-scroll svg{width:18px;height:18px;animation:tapb 1.4s ease-in-out infinite}
+
 /* ---------- lightbox / toast / petals ---------- */
 #petals{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:110}
 :focus-visible{outline:2px solid var(--gold);outline-offset:3px}
@@ -345,9 +365,9 @@ footer{padding:20px 20px max(150px,calc(env(safe-area-inset-bottom) + 140px));te
     <div class="frame-wrap"><div class="frame">
       <picture><source srcset="images/frame-portrait.webp" type="image/webp"><img src="images/frame-portrait.jpg" alt="" width="1200" height="1800" loading="lazy"></picture>
       <div class="paper"><div class="flow"><span class="leaf"></span><div class="sp"></div>
-        <p class="ln br">ಸ್ವಸ್ತಿ ಶ್ರೀ ವಿಜಯಾಭ್ಯುದಯ ಶ್ರೀ ಶಾಲಿವಾಹನ ಶಕೆ 1948 ನೇ ಶ್ರೀ ಪರಾಭವನಾಮ ಸಂವತ್ಸರದ ಕಾರ್ತಿಕ ಮಾಸ ಮಾರ್ಗಶಿರ</p>
-        <p class="ln hl">ತಾ॥ 22-11-2026, ಭಾನುವಾರ<br>ಬೆಳಗ್ಗೆ 5-07 ರಿಂದ 7-58 ರವರೆಗೆ</p>
-        <p class="ln br">ಸಲ್ಲುವ ಶುಭ ಲಗ್ನದ ಶುಭ ಮುಹೂರ್ತದಲ್ಲಿ ನಾವು ಬೆಳಗುತ್ತಿ ಮುಖ್ಯ ರಸ್ತೆಯಲ್ಲಿ ನೂತನವಾಗಿ ನಿರ್ಮಿಸಿರುವ</p>
+        <p class="ln br"><span class="nw">ಸ್ವಸ್ತಿ ಶ್ರೀ ವಿಜಯಾಭ್ಯುದಯ</span> <span class="nw">ಶ್ರೀ ಶಾಲಿವಾಹನ ಶಕೆ 1948 ನೇ</span> <span class="nw">ಶ್ರೀ ಪರಾಭವನಾಮ ಸಂವತ್ಸರದ</span> <span class="nw">ಕಾರ್ತಿಕ ಮಾಸ ಮಾರ್ಗಶಿರ</span></p>
+        <p class="ln hl"><span class="nw">ತಾ॥ 22-11-2026, ಭಾನುವಾರ</span> <span class="nw">ಬೆಳಗ್ಗೆ 5-07 ರಿಂದ 7-58 ರವರೆಗೆ</span></p>
+        <p class="ln br"><span class="nw">ಸಲ್ಲುವ ಶುಭ ಲಗ್ನದ</span> <span class="nw">ಶುಭ ಮುಹೂರ್ತದಲ್ಲಿ ನಾವು</span> <span class="nw">ಬೆಳಗುತ್ತಿ ಮುಖ್ಯ ರಸ್ತೆಯಲ್ಲಿ</span> <span class="nw">ನೂತನವಾಗಿ ನಿರ್ಮಿಸಿರುವ</span></p>
         <div class="ln cartouche">“ಅಕ್ಷಯ”</div>
       </div></div>
     </div></div>
@@ -359,8 +379,7 @@ footer{padding:20px 20px max(150px,calc(env(safe-area-inset-bottom) + 140px));te
     <div class="frame-wrap"><div class="frame">
       <picture><source srcset="images/frame-portrait.webp" type="image/webp"><img src="images/frame-portrait.jpg" alt="" width="1200" height="1800" loading="lazy"></picture>
       <div class="paper"><div class="flow"><span class="leaf"></span><div class="sp"></div>
-        <img class="ln house" src="images/house.jpg" alt="“ಅಕ್ಷಯ” – ನೂತನ ಮನೆ" width="712" height="416" loading="lazy">
-        <p class="ln">ದೇವರಮನೆಯ <b class="cr">“ಗೃಹಪ್ರವೇಶ”</b> ಹಾಗೂ <b class="cr">“ಶ್ರೀ ಸತ್ಯನಾರಾಯಣಸ್ವಾಮಿ ಪೂಜೆ”</b> ನೆರವೇರಿಸಲು ಗುರುಹಿರಿಯರು ನಿಶ್ಚಯಿಸಿರುವುದರಿಂದ ತಾವುಗಳು ಸಕುಟುಂಬ ಪರಿವಾರ ಸಮೇತರಾಗಿ ಆಗಮಿಸಿ, ಶುಭ ಹಾರೈಸಬೇಕಾಗಿ ಕೋರುತ್ತೇವೆ.</p>
+        <p class="ln"><span class="nw">ದೇವರಮನೆಯ <b class="cr">“ಗೃಹಪ್ರವೇಶ”</b> ಹಾಗೂ</span> <span class="nw"><b class="cr">“ಶ್ರೀ ಸತ್ಯನಾರಾಯಣಸ್ವಾಮಿ ಪೂಜೆ”</b></span> <span class="nw">ನೆರವೇರಿಸಲು ಗುರುಹಿರಿಯರು</span> <span class="nw">ನಿಶ್ಚಯಿಸಿರುವುದರಿಂದ ತಾವುಗಳು</span> <span class="nw">ಸಕುಟುಂಬ ಪರಿವಾರ ಸಮೇತರಾಗಿ</span> <span class="nw">ಆಗಮಿಸಿ, ಶುಭ ಹಾರೈಸಬೇಕಾಗಿ</span> <span class="nw">ಕೋರುತ್ತೇವೆ.</span></p>
       </div></div>
     </div></div>
   </section>
@@ -376,7 +395,7 @@ footer{padding:20px 20px max(150px,calc(env(safe-area-inset-bottom) + 140px));te
       </div>
       <canvas id="scratch" aria-hidden="true"></canvas>
     </div>
-    <button class="linkbtn" id="revealBtn" type="button">ಉಜ್ಜದೆ ನೋಡಿ · Tap to reveal</button>
+    <button class="linkbtn" id="revealBtn" type="button">Tap to reveal</button>
   </section>
 
   <!-- ================= Programme ================= -->
@@ -418,10 +437,17 @@ footer{padding:20px 20px max(150px,calc(env(safe-area-inset-bottom) + 140px));te
     </div>
   </section>
 
-  <footer><a class="credit" href="https://shashankabcbuilds.in" target="_blank" rel="noopener"><small>Designed by</small><b>SHASHANKABCBUILDS.IN</b></a></footer>
+  <footer>
+    <a class="foot-ask" href="https://shashankabcbuilds.in" target="_blank" rel="noopener">Click here to know who designed this website<span aria-hidden="true">👇</span></a>
+    <a class="credit" href="https://shashankabcbuilds.in" target="_blank" rel="noopener"><small>Designed &amp; developed by</small><b>SHASHANKABCBUILDS.IN</b><em>Visit website ↗</em></a>
+  </footer>
 </div>
 
 <canvas id="petals" aria-hidden="true"></canvas>
+<audio id="bgm" src="audio/music.mp3" preload="auto" playsinline></audio>
+<button class="fab fab-scroll" id="scrollBtn" type="button" aria-label="Scroll down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>Scroll</button>
+<button class="fab fab-music" id="musicBtn" type="button" aria-label="Pause music"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+  <svg class="note" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 18.5a3 3 0 1 1-2-2.83V5l12-2v11.5a3 3 0 1 1-2-2.83V6.3l-8 1.33v10.87z"/></svg></button>
 
 <script>
 (() => {
@@ -452,7 +478,6 @@ if ("ResizeObserver" in window) { const ro = new ResizeObserver(es => es.forEach
 else addEventListener("resize", fitAll);
 document.fonts && document.fonts.ready.then(fitAll);
 addEventListener("load", fitAll); fitAll();
-$$(".house").forEach(i => i.addEventListener("load", fitAll));
 
 /* ---------- scroll reveal ---------- */
 let io = null;
@@ -541,7 +566,7 @@ const step = ms => Promise.race([wait(ms), skipP]);
 let skipped = false;
 async function openGate() {
   if (gateOpen) return; gateOpen = true;
-  audio();
+  audio(); startMusic();
   const aks = $$(".st-name .ak");
   if (reduce) { aks.forEach(a => a.classList.add("on")); gate.classList.add("done"); finishGate(); return; }
   gate.classList.add("opening"); crack();
@@ -557,6 +582,7 @@ async function openGate() {
   }
   aks.forEach(a => a.classList.add("on"));
   stage.classList.add("full"); finale(); burst($(".st-name"), 70, 1.6);
+  setTimeout(() => fadeMusic(.75, 2500), 1800);
   await (skipped ? wait(900) : step(3000));
   gate.classList.add("done");
   petals(innerWidth / 2, innerHeight * .45);
@@ -564,7 +590,69 @@ async function openGate() {
   await wait(1000); gate.remove();
 }
 stage.addEventListener("click", () => { if (gate.classList.contains("staged") && !skipped) { skipped = true; skip(); } });
-function finishGate() { document.body.classList.remove("locked"); scrollTo(0, 0); startReveal(); fitAll(); }
+function finishGate() { document.body.classList.remove("locked"); document.body.classList.add("opened"); scrollTo(0, 0); startReveal(); fitAll(); centerInk(); updateScrollBtn(); }
+
+/* ---------- background music: starts on the first tap, from 0:03 ---------- */
+const bgm = $("#bgm"), musicBtn = $("#musicBtn"), START_AT = 3;
+let userPaused = false, fadeT = null;
+function seekStart() { try { bgm.currentTime = START_AT; } catch (_) {} }
+bgm.addEventListener("loadedmetadata", () => { if (bgm.currentTime < START_AT) seekStart(); });
+bgm.addEventListener("ended", () => { seekStart(); bgm.play().catch(() => {}); });   // loop from 0:03
+function fadeMusic(to, ms) {
+  clearInterval(fadeT); const from = bgm.volume, t0 = performance.now();
+  fadeT = setInterval(() => { const k = Math.min(1, (performance.now() - t0) / ms); try { bgm.volume = from + (to - from) * k; } catch (_) {} if (k >= 1) clearInterval(fadeT); }, 50);
+}
+function startMusic() {
+  if (bgm.readyState >= 1) seekStart();
+  try { bgm.volume = 0; } catch (_) {}
+  const p = bgm.play();
+  if (p && p.then) p.then(() => { if (bgm.currentTime < START_AT - .5) seekStart(); fadeMusic(.4, 1500); setMusicUI(true); }).catch(() => setMusicUI(false));
+  else { fadeMusic(.4, 1500); setMusicUI(true); }
+}
+function setMusicUI(on) { musicBtn.classList.toggle("off", !on); musicBtn.setAttribute("aria-label", on ? "Pause music" : "Play music"); }
+musicBtn.addEventListener("click", () => {
+  if (bgm.paused) { userPaused = false; if (bgm.currentTime < START_AT) seekStart(); bgm.play().then(() => { fadeMusic(.75, 600); setMusicUI(true); }).catch(() => {}); }
+  else { userPaused = true; bgm.pause(); setMusicUI(false); }
+});
+document.addEventListener("visibilitychange", () => {          // pause when the phone is locked / tab hidden
+  if (document.hidden) { if (!bgm.paused) { bgm.pause(); bgm.dataset.auto = "1"; } }
+  else if (bgm.dataset.auto === "1" && !userPaused) { bgm.dataset.auto = ""; bgm.play().catch(() => {}); }
+});
+
+/* ---------- scroll button: shows guests there is more below ---------- */
+const scrollBtn = $("#scrollBtn");
+function updateScrollBtn() { const end = document.documentElement.scrollHeight - innerHeight - 160; scrollBtn.classList.toggle("hide", scrollY > end); }
+let idleT;
+addEventListener("scroll", () => {               // fade away while the guest scrolls, come back when they stop
+  updateScrollBtn(); scrollBtn.classList.add("moving");
+  clearTimeout(idleT); idleT = setTimeout(() => scrollBtn.classList.remove("moving"), 1400);
+}, { passive: true });
+scrollBtn.addEventListener("click", () => {
+  const blocks = $$(".page > header, .page > section, .page > footer");
+  const next = blocks.find(b => b.getBoundingClientRect().top > 90);
+  if (next) next.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+  else scrollBy({ top: innerHeight * .8, behavior: "smooth" });
+});
+
+/* ---------- place the name in the exact middle of its box, whatever the font ---------- */
+function centerInk() {
+  const c = document.createElement("canvas").getContext("2d");
+  $$(".cartouche").forEach(el => {
+    const cs = getComputedStyle(el), fs = parseFloat(cs.fontSize);
+    c.font = `${cs.fontWeight} ${fs}px ${cs.fontFamily}`;
+    const m = c.measureText(el.textContent.trim());
+    if (!m.fontBoundingBoxAscent || !m.actualBoundingBoxAscent) return;
+    const top = m.fontBoundingBoxAscent - m.actualBoundingBoxAscent;      // empty space above the letters
+    const bot = m.fontBoundingBoxDescent - m.actualBoundingBoxDescent;    // empty space below the letters
+    const base = .14, diff = (bot - top) / fs;
+    el.style.setProperty("--pt", (base + Math.max(0, diff)) + "em");
+    el.style.setProperty("--pb", (base + Math.max(0, -diff)) + "em");
+    el.style.lineHeight = "normal";
+  });
+  fitAll();
+}
+document.fonts && document.fonts.ready.then(centerInk);
+centerInk();
 $(".seal").addEventListener("click", openGate);
 $("#tapBtn").addEventListener("click", openGate);
 $("#env").addEventListener("click", openGate);
@@ -595,10 +683,8 @@ function drawFoil() {
   ctx.setLineDash([5, 5]); ctx.lineWidth = 1.2; ctx.strokeStyle = "rgba(236,208,138,.9)"; rr(ctx, 12, 12, W - 24, H - 24, 14); ctx.stroke(); ctx.setLineDash([]);
   ctx.textAlign = "center"; ctx.textBaseline = "middle";
   ctx.shadowColor = "rgba(0,0,0,.55)"; ctx.shadowBlur = 6;
-  ctx.fillStyle = "#fff6dc"; ctx.font = `700 ${Math.min(W * .075, 26)}px "Noto Serif Kannada",serif`;
-  ctx.fillText("ಉಜ್ಜಿ ನೋಡಿ", W / 2, H / 2 - 14);
-  ctx.fillStyle = "#f3d27a"; ctx.font = `400 ${Math.min(W * .036, 13)}px Marcellus, serif`;
-  ctx.fillText("✦  " + "SCRATCH TO REVEAL THE DATE".split("").join(" ") + "  ✦", W / 2, H / 2 + 18);
+  ctx.fillStyle = "#f6dc93"; ctx.font = `400 ${Math.min(W * .044, 15)}px Marcellus, serif`;
+  ctx.fillText("✦  " + "SCRATCH TO REVEAL THE DATE".split("").join(" ") + "  ✦", W / 2, H / 2);
   ctx.shadowColor = "transparent"; ctx.shadowBlur = 0;
   cells = new Uint8Array(G * G); cleared = 0; brush = Math.max(18, Math.min(W, H) * .1); lastW = W;
 }
